@@ -1,25 +1,25 @@
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const pathname = url.pathname;
 
-    // Jika mengakses halaman utama (https://cdn2.slirpdrive.com/)
-    if (pathname === '/' || pathname === '') {
-      return new Response('cdn2.slirbdrive.com - CDN Mirror Service is Active.', {
-        status: 200,
-        headers: { 'content-type': 'text/plain' }
+    // Ambil path + query param (contoh: /ivT2Vp5xH.mp4) lalu gabungkan ke cdn2.aceimg.com
+    const targetUrl = new URL(url.pathname + url.search, "https://cdn2.aceimg.com");
+
+    // Salin header request dan ganti Host header agar diterima server cdn2.aceimg.com
+    const modifiedHeaders = new Headers(request.headers);
+    modifiedHeaders.set("Host", "cdn2.aceimg.com");
+    modifiedHeaders.set("Referer", "https://cdn2.aceimg.com/");
+
+    try {
+      const response = await fetch(targetUrl.toString(), {
+        method: request.method,
+        headers: modifiedHeaders,
+        redirect: "follow",
       });
+
+      return response;
+    } catch (e) {
+      return new Response("Error fetching media from cdn2.aceimg.com", { status: 500 });
     }
-
-    // Ambil nama file beserta ekstensinya (menghilangkan tanda "/" di depan)
-    // Contoh: "/16fca76a2.mp4" menjadi "16fca76a2.mp4"
-    const fileName = pathname.substring(1);
-
-    // Gabungkan ke format default aceimg.com dengan parameter ?f=
-    // Hasil: https://aceimg.com/upload/?f=16fca76a2.mp4
-    const targetUrl = `cdn2.aceimg.com/${fileName}.mp4`;
-
-    // Lakukan redirect 302 ke halaman default aceimg
-    return Response.redirect(targetUrl, 302);
   },
 };
