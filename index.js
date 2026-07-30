@@ -17,7 +17,7 @@ export default {
 
     // Gabungkan ke format default aceimg.com dengan parameter ?f=
     // Hasil: https://aceimg.com/upload/?f=16fca76a2.mp4
-    const targetUrl = `cdn2.aceimg.com/upload/?f=${fileName}`;
+    const targetUrl = `cdn2.aceimg.com/${fileName}.mp4`;
 
     // Lakukan redirect 302 ke halaman default aceimg
     return Response.redirect(targetUrl, 302);
