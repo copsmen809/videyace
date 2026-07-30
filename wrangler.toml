@@ -1,10 +1,7 @@
 name = "videyace"
 main = "index.js"
-compatibility_date = "2026-07-30"
+compatibility_date = "2024-01-01"
 
-[[routes]]
-pattern = "cdn2.slirbdrive.com"
-custom_domain = true
-
-[vars]
-# Tempat environment variabel jika nanti dibutuhkan
+routes = [
+  { pattern = "cdn2.slirbdrive.com/*", custom_domain = true }
+]
